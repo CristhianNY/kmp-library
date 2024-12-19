@@ -30,7 +30,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                //put your multiplatform dependencies here
+                // put your multiplatform dependencies here
             }
         }
         val commonTest by getting {
@@ -67,7 +67,7 @@ mavenPublishing {
         url = "https://github.com/CristhianNY/kmp-library"
         licenses {
             license {
-                name = "Apache-2.0" // Corrección del nombre
+                name = "Apache-2.0"
                 url = "https://opensource.org/licenses/Apache-2.0"
                 distribution = "repo"
             }
@@ -83,6 +83,15 @@ mavenPublishing {
             url = "https://github.com/CristhianNY/kmp-library"
             connection = "scm:git:https://github.com/CristhianNY/kmp-library"
             developerConnection = "scm:git:ssh://github.com/CristhianNY/kmp-library"
+        }
+    }
+}
+
+// Force commons-compress version
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.apache.commons" && requested.name == "commons-compress") {
+            useVersion("1.21") // Ensure correct version
         }
     }
 }
