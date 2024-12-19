@@ -87,6 +87,21 @@ mavenPublishing {
     }
 }
 
+// Task to prepare the staging directory for JReleaser
+tasks.register("prepareStagingDirectory") {
+    doLast {
+        val stagingDir = file("build/staging-deploy")
+        if (!stagingDir.exists()) {
+            stagingDir.mkdirs()
+        }
+    }
+}
+
+// Ensure the staging directory is created before JReleaser tasks
+tasks.named("jreleaserFullRelease") {
+    dependsOn("prepareStagingDirectory")
+}
+
 jreleaser {
     gitRootSearch = true
     signing {
