@@ -88,6 +88,7 @@ mavenPublishing {
 }
 
 jreleaser {
+    gitRootSearch = true
     signing {
         active.set(org.jreleaser.model.Active.ALWAYS)
         armored.set(true)
