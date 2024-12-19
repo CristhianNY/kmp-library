@@ -89,10 +89,8 @@ mavenPublishing {
 
 // Force commons-compress version
 configurations.all {
-    resolutionStrategy.eachDependency {
-        if (requested.group == "org.apache.commons" && requested.name == "commons-compress") {
-            useVersion("1.21") // Ensure correct version
-        }
+    resolutionStrategy {
+        force("org.apache.commons:commons-compress:1.22")
     }
 }
 
