@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.vanniktech.mavenPublish)
 }
 
-group = "io.github.kotlin"
+group = "io.github.cristhianny"
 version = "1.0.0"
 
 kotlin {
@@ -63,25 +63,25 @@ mavenPublishing {
         name = "My library"
         description = "A library."
         inceptionYear = "2024"
-        url = "https://github.com/kotlin/multiplatform-library-template/"
+        url = "https://github.com/CristhianNY/kmp-library"
         licenses {
             license {
-                name = "XXX"
-                url = "YYY"
-                distribution = "ZZZ"
+                name = "Apache-2.0" // Corrección del nombre
+                url = "https://opensource.org/licenses/Apache-2.0"
+                distribution = "repo"
             }
         }
         developers {
             developer {
-                id = "XXX"
-                name = "YYY"
-                url = "ZZZ"
+                id = "cristhianny"
+                name = "Cristhian Ariel Bonilla"
+                url = "https://github.com/CristhianNY"
             }
         }
         scm {
-            url = "XXX"
-            connection = "YYY"
-            developerConnection = "ZZZ"
+            url = "https://github.com/CristhianNY/kmp-library"
+            connection = "scm:git:https://github.com/CristhianNY/kmp-library"
+            developerConnection = "scm:git:ssh://github.com/CristhianNY/kmp-library"
         }
     }
 }
