@@ -11,3 +11,26 @@ xcuserdata
 .kotlin
 #So we don't accidentally commit our private keys
 *.gpg
+# Excluir archivos sensibles
+public.pgp
+private.pgp
+~/.jreleaser/config.toml
+
+# Excluir directorios de compilación
+build/
+.idea/
+.gradle/
+*/build/
+
+# Excluir archivos generados
+*.iml
+.DS_Store
+*.class
+*.log
+*.swp
+*.tmp
+*.bak
+
+# Excluir configuraciones locales de Gradle
+gradle.properties
+

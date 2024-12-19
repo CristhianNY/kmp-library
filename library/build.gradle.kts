@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.vanniktech.mavenPublish)
+    id("org.jreleaser") version "1.15.0"
 }
 
 group = "io.github.cristhianny"
@@ -82,6 +83,27 @@ mavenPublishing {
             url = "https://github.com/CristhianNY/kmp-library"
             connection = "scm:git:https://github.com/CristhianNY/kmp-library"
             developerConnection = "scm:git:ssh://github.com/CristhianNY/kmp-library"
+        }
+    }
+}
+
+jreleaser {
+    signing {
+        active.set(org.jreleaser.model.Active.ALWAYS)
+        armored.set(true)
+    }
+    deploy {
+        maven {
+            nexus2 {
+                register("mavenCentral") {
+                    active.set(org.jreleaser.model.Active.ALWAYS)
+                    url.set("https://s01.oss.sonatype.org/service/local")
+                    snapshotUrl.set("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                    closeRepository.set(true)
+                    releaseRepository.set(true)
+                    stagingRepositories.add(file("build/staging-deploy").toString())
+                }
+            }
         }
     }
 }
