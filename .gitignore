@@ -32,6 +32,6 @@ build/
 *.bak
 
 # Excluir configuraciones locales de Gradle
-gradle.properties
+gradle.properties 
 
 
