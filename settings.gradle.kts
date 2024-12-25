@@ -4,6 +4,13 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "org.jreleaser") {
+                useVersion("1.15.0")
+            }
+        }
+    }
 }
 
 dependencyResolutionManagement {

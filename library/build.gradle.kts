@@ -7,25 +7,31 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.vanniktech.mavenPublish)
-    id("org.jreleaser") version "1.15.0"
 }
 
 group = "io.github.cristhianny"
 version = "1.0.0"
 
 kotlin {
-    jvm()
     androidTarget {
-        publishLibraryVariants("release")
+        publishLibraryVariants("release", "debug")
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_1_8)
         }
     }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-    linuxX64()
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "library"
+            isStatic = true
+        }
+    }
+
 
     sourceSets {
         val commonMain by getting {
@@ -33,10 +39,11 @@ kotlin {
                 // put your multiplatform dependencies here
             }
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
-            }
+
+        val androidMain by getting {
+             dependencies {
+                  implementation("androidx.startup:startup-runtime:1.2.0")
+             }
         }
         @OptIn(ExperimentalWasmDsl::class)
         wasmJs {
@@ -46,7 +53,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.jetbrains.kotlinx.multiplatform.library.template"
+    namespace = "io.github.cristhianny"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -58,34 +65,36 @@ mavenPublishing {
 
     signAllPublications()
 
-    coordinates(group.toString(), "library", version.toString())
+    coordinates(group.toString(), "kmp-library", version.toString())
 
     pom {
-        name = "My library"
-        description = "A library."
-        inceptionYear = "2024"
-        url = "https://github.com/CristhianNY/kmp-library"
+        name.set("My Library")
+        description.set("A Kotlin Multiplatform library.")
+        inceptionYear.set("2024")
+        url.set("https://github.com/CristhianNY/kmp-library")
         licenses {
             license {
-                name = "Apache-2.0"
-                url = "https://opensource.org/licenses/Apache-2.0"
-                distribution = "repo"
+                name.set("Apache-2.0")
+                url.set("https://opensource.org/licenses/Apache-2.0")
+                distribution.set("repo")
             }
         }
         developers {
             developer {
-                id = "cristhianny"
-                name = "Cristhian Ariel Bonilla"
-                url = "https://github.com/CristhianNY"
+                id.set("cristhianny")
+                name.set("Cristhian Ariel Bonilla")
+                url.set("https://github.com/CristhianNY")
             }
         }
         scm {
-            url = "https://github.com/CristhianNY/kmp-library"
-            connection = "scm:git:https://github.com/CristhianNY/kmp-library"
-            developerConnection = "scm:git:ssh://github.com/CristhianNY/kmp-library"
+            url.set("https://github.com/CristhianNY/kmp-library")
+            connection.set("scm:git:https://github.com/CristhianNY/kmp-library.git")
+            developerConnection.set("scm:git:ssh://git@github.com:CristhianNY/kmp-library.git")
         }
     }
+
 }
+
 
 // Force commons-compress version
 configurations.all {
@@ -104,29 +113,3 @@ tasks.register("prepareStagingDirectory") {
     }
 }
 
-// Ensure the staging directory is created before JReleaser tasks
-tasks.named("jreleaserFullRelease") {
-    dependsOn("prepareStagingDirectory")
-}
-
-jreleaser {
-    gitRootSearch = true
-    signing {
-        active.set(org.jreleaser.model.Active.ALWAYS)
-        armored.set(true)
-    }
-    deploy {
-        maven {
-            nexus2 {
-                register("mavenCentral") {
-                    active.set(org.jreleaser.model.Active.ALWAYS)
-                    url.set("https://s01.oss.sonatype.org/service/local")
-                    snapshotUrl.set("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-                    closeRepository.set(true)
-                    releaseRepository.set(true)
-                    stagingRepositories.add(file("build/staging-deploy").toString())
-                }
-            }
-        }
-    }
-}
